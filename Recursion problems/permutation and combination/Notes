@@ -1,0 +1,6 @@
+1. Permuation, npr = fact(n)/fact(n-r)
+2. Combination, ncr = fact(n)/( fact(n-r) *fact(r) )
+3. Relation: [ npr = ncr * fact(r) ]
+3. when non similar items, then npr = ncr * fact(r).
+4. when similar items, then npr = (ncr * fact(r)) / fact(no. of common elemnts 1st set) * fact(no. of common elemnts 2nd set) * ........
+5. 2^n = nc0 + nc1 + nc2 + nc3 + ..... + ncn
