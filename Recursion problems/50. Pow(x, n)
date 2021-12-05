@@ -11,7 +11,7 @@ Input: x = 2.10000, n = 3
 Output: 9.26100
 ---------------------------------------------------------------------------------
 
-Solution:
+Solution 1:=======
 
 class Solution {
     public double myPow(double x, int n) {
@@ -35,6 +35,38 @@ class Solution {
      }  
     }
 }
+----------------------------------------------------------------------------------------------------------------------------
+Solution 2:
+
+class Solution {
+    public static double power(double x, int n){
+        if(n==0){
+            return 1.0;
+        }
+        double ans = power(x, n/2);
+        if(n%2==0){
+            return ans*ans;
+        } else{
+            return x*ans*ans;
+        }
+    }
+    
+    public double myPow(double x, int n) {
+        if(n==0){
+            return 1.0;
+        }
+        if(n<0){
+            double ans = power(x, -n);// we made negative value of n, which will convert to +ve.
+            return 1.0/ans; dividing ans by 1.0 so that negative powered answer can be achieved.
+        }
+        return power(x, n);
+    }
+}
+    
+    
+
+
+
 ----------------------------------------------------------------------------------------------------------------------------
 T(c) = calls(1)^ height(logn) +preorder(0) * height(logn) + postorder(k = constant) * height(logn).
      = 1 + 0 + k*log(n).
