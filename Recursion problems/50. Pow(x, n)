@@ -62,10 +62,6 @@ class Solution {
         return power(x, n);
     }
 }
-    
-    
-
-
 
 ----------------------------------------------------------------------------------------------------------------------------
 T(c) = calls(1)^ height(logn) +preorder(0) * height(logn) + postorder(k = constant) * height(logn).
