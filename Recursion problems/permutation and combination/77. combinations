@@ -1,0 +1,50 @@
+Given two integers n and k, return all possible combinations of k numbers out of the range [1, n].
+
+You may return the answer in any order.
+=====================================================================================================
+Example 1:
+
+Input: n = 4, k = 2
+Output:
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+Example 2:
+
+Input: n = 1, k = 1
+Output: [[1]]
+================================================================================================================
+
+class Solution {
+    
+    public void combine(List<List<Integer>> combinations, List<Integer> combination, int currBox, int n, int k){
+        if(currBox==n){
+            if(combination.size()==k){
+                // deep copy
+                List<Integer> temp = new ArrayList<>(combination);
+                combinations.add(temp);
+            }
+            return;
+        }
+        
+        // yes, item to be added
+        combination.add(currBox+1);
+        combine(combinations, combination, currBox+1, n, k);
+        combination.remove(combination.size()-1);// removal of above added element so that next cobination can be check.
+        
+        //no, item cannot be added
+        combine(combinations, combination, currBox+1, n, k);//box will be incremented in both case(yes and no). 
+    }
+    
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> combinations = new ArrayList<>();
+        List<Integer> combination = new ArrayList<>();
+        combine(combinations, combination, 0, n, k);
+        return combinations;
+    }
+}
