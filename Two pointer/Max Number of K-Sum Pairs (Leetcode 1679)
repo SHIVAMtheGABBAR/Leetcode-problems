@@ -1,0 +1,82 @@
+You are given an integer array nums and an integer k.
+
+In one operation, you can pick two numbers from the array whose sum equals k and remove them from the array.
+
+Return the maximum number of operations you can perform on the array.
+---------------------------------------------------------------------------------------------------------------
+Input: nums = [1,2,3,4], k = 5
+Output: 2
+Explanation: Starting with nums = [1,2,3,4]:
+- Remove numbers 1 and 4, then nums = [2,3]
+- Remove numbers 2 and 3, then nums = []
+There are no more pairs that sum up to 5, hence a total of 2 operations.
+
+Input: nums = [3,1,3,4,3], k = 6
+Output: 1
+Explanation: Starting with nums = [3,1,3,4,3]:
+- Remove the first two 3's, then nums = [1,4,3]
+There are no more pairs that sum up to 6, hence a total of 1 operation
+--------------------------------------------------------------------------------------------------------------
+Approach 1: sort the array and use two pointer approach to count pairs.
+
+class Solution {
+    public int maxOperations(int[] nums, int k) {
+        int count = 0;
+        Arrays.sort(nums);
+        
+        int start = 0, end = nums.length-1;
+        
+        while(start < end){
+             if(nums[start] + nums[end]==k){
+                 count++;
+                 end--;
+                 start++;
+             } else if(nums[start] + nums[end]>k){
+                 end--;
+             } else{
+                 start++;
+             }
+        }
+        return count;
+    }
+}
+---------------------------
+Time Complexity = O(NLogN)
+Space Complexity = O(1)
+--------------------------------------------------------------------------------------------------------------
+
+Approach 2: Use Hashmap and Traverse the Array
+            a. If (Target - current value) is not in HashMap, 
+                  1. If current value is not present, then add current value in map with value as 1.
+                  2. I present then add current value in map with value as incremented by 1.
+            b. Else Increment count of pairs, and decrement the value in hashmap by 1 for (Target - Current value).
+
+class Solution {
+    public int maxOperations(int[] nums, int k) {
+        HashMap<Integer, Integer> hmap = new HashMap<>();
+        int count = 0;
+        
+        for(int i=0;i<nums.length;i++){
+            if(hmap.get(k-nums[i]) == null){
+               if(hmap.get(nums[i]) == null) {
+                 hmap.put(nums[i],1);  
+               } else{
+                 hmap.put(nums[i],hmap.get(nums[i])+1);  
+               } 
+            } else{
+                count++;
+                int valCount = hmap.get(k-nums[i]);
+                if(valCount<=1)
+                    hmap.remove(k-nums[i]);
+                else
+                    hmap.put(k-nums[i], valCount-1);
+            }
+        }
+        return count;
+    }
+}
+---------------------------
+Time Complexity = O(N)
+Space Complexity = O(N)
+---------------------------
+
