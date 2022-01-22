@@ -1,0 +1,40 @@
+Design and implement a TwoSum class. It should support the following operations: add and find.
+
+add - Add the number to an internal data structure.
+find - Find if there exists any pair of numbers which sum is equal to the value.
+
+Example 1:
+add(1); add(3); add(5);
+find(4) // return true
+find(7) // return false
+----------------------------------------------------------------------------------------------------------
+public class TwoSum {
+    
+    HashMap<Integer, Integer> hm;
+
+    public TwoSum(){
+        hm = new HashMap<>();
+    }
+
+    public void add(int number) {
+        hm.put(number, hm.getOrDefault(number, 0)+1);
+    }
+
+    public boolean find(int value) {
+        for(Integer key : hm.keySet()){
+            int comp = value-key;
+            if(comp==key && hm.getOrDefault(comp,0)>1){ // To check if comp and key both are same then, we need to check its value in hashmap more than once 
+                return true;    
+            }
+            else if(comp!=key && hm.getOrDefault(comp,0)>0){
+                return true;
+            }    
+        }
+        return false;
+    }
+}
+------------------------------------------------------------------------------------------------------------------
+Time complexity: Add = Frequency Update = O(1) - Average case
+                                          O(N) - Worst case, when collisions happen
+                                          
+                 Find = Check complement by Iterating on hashMap = O(N)                        
