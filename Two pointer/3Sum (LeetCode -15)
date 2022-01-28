@@ -1,0 +1,68 @@
+Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+Notice that the solution set must not contain duplicate triplets.
+---------------------------------------------------------------------------------------------------------------------
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
+
+Input: nums = []
+Output: []
+
+Input: nums = [0]
+Output: []
+----------------------------------------------------------------- 
+Constraints:
+0 <= nums.length <= 3000
+-105 <= nums[i] <= 105
+---------------------------------------------------------------------------------------------------------------------------
+Approach: Sort the array. Take one element as part of triplet and apply two pinter on rest of the values to get the triplet.  
+Time omplexity = O(N^2) = O(N * N) + O(NLogN)
+Space complexity = O(N)
+---------------------------------------------------------------
+class Solution {
+    
+    public List<List<Integer>> getPairs(int[] nums, int left, int right, int target){
+        List<List<Integer>> pairs = new ArrayList<>();
+        int start = left;                                          // this is to check left and start should not be first element in case of checking 
+                                                                   // nums[left-1]==nums[left]
+        while(left<right){
+            if(left>start && nums[left-1]==nums[left]){
+                left++;                                             // if same then increment left by 1and continue.
+                continue;
+            }
+            
+            int sum = nums[left] + nums[right];
+            if(sum==target){
+                List<Integer> pair = new ArrayList<>();             // Add pair to answer, and also increment left and decrement right
+                pair.add(nums[left]);
+                pair.add(nums[right]);
+                pairs.add(pair);
+                left++;
+                right--;
+            } else if(sum>target){
+                right--;                                            // Decrement right
+            } else{
+                left++;                                             // Increment left
+            }
+        }
+        
+        return pairs;                                               // return all pairs
+    }
+    
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> finalList = new ArrayList<>();
+        Arrays.sort(nums);                                   // sort the array
+        for(int first=0;first<nums.length;first++){
+            if(first>0 && nums[first-1]==nums[first]){       // take first element of triplet, but it should not be equal to previous element.
+                continue;
+            }
+            
+            List<List<Integer>> pairs = getPairs(nums, first+1, nums.length-1, -nums[first]);   // get pairs with help of 2 pointer and ten add first element
+                                                                                                // as triplet value in front of pair values, which forms triplet. 
+            for(List<Integer> triplet : pairs){
+                triplet.add(0, nums[first]);                                                    // making triplet with the help of pair.
+                finalList.add(triplet);
+            }
+        }
+        return finalList;                                                                       // Return final list of Triplets.
+    }
+}
