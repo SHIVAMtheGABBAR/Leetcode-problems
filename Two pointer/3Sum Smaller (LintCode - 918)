@@ -1,0 +1,49 @@
+Given an array of n integers nums and a target, find the number of index triplets i, j, k with 0 <= i < j < k < n 
+that satisfy the condition nums[i] + nums[j] + nums[k] < target.
+--------------------------------------------------------------------------
+Input:  nums = [-2,0,1,3], target = 2
+Output: 2
+Explanation:
+Because there are two triplets which sums are less than 2:
+[-2, 0, 1]
+[-2, 0, 3]
+
+Input: nums = [-2,0,-1,3], target = 2
+Output: 3
+Explanation:
+Because there are three triplets which sums are less than 2:
+[-2, 0, -1]
+[-2, 0, 3]
+[-2, -1, 3]
+------------------------------------------------------------------------------------
+Challenge
+Could you solve it in O(n2) runtime?
+------------------------------------------------------------------------------------
+Approach: Sort the Array.Get count of pairs from getPairs function, which returns all the pairs whose (sum<target).
+Time complexity = O(N^2)
+Space complexity = O(1) 
+-------------------------------------------------------------------------------------
+public class Solution {
+        public int getPairs(int[] nums, int left, int right, int target){
+            int count = 0;
+            while(left<right){
+                int sum = nums[left] + nums[right];
+                if(sum<target){
+                    count+=(right-left);
+                    left++;
+                } else{
+                    right--;
+                }
+            }
+            return count;
+        }
+        
+        public int threeSumSmaller(int[] nums, int target) {
+            Arrays.sort(nums);
+            int count = 0;
+            for(int first=0;first<nums.length;first++){       
+                count += getPairs(nums, first+1, nums.length-1, target-nums[first]);
+            }
+            return count;
+        }
+}
