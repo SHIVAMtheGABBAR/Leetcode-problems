@@ -1,0 +1,62 @@
+Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.
+Return the sum of the three integers.
+-------------------------------------------------------------------------
+Input: nums = [-1,2,1,-4], target = 1
+Output: 2
+Explanation: The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+
+Input: nums = [0,0,0], target = 1
+Output: 0
+--------------------------------------------------------
+Constraints:
+3 <= nums.length <= 1000
+-1000 <= nums[i] <= 1000
+-104 <= target <= 104
+-----------------------------------------------------------------------------------------
+Approach: 
+Time complexity: O(N^2) + O(NLOGN)  = O(N^2)
+Space complexity: O(1)
+---------------------------------------------------------------------------------------
+class Solution {
+    
+    public int getTwoSumClosest(int[] nums, int left, int target){
+        int abs = Integer.MAX_VALUE;
+        int ans = Integer.MAX_VALUE;
+        int right = nums.length-1;
+        
+        while(left<right){
+            int sum = nums[left] + nums[right];                           // sum of two elements
+            if(sum==target){                                              // if (sum==target), means that is the min difference, return the target.
+                return target;
+            } else if(sum>target){                     // if sum>target, then decrement right  and update absolute difference and sum which needs to be return
+                if(sum-target<abs){
+                    abs = sum-target;
+                    ans= sum;
+                }
+                right--;
+            } else{                                                     // else increment left and update absolute difference and sum which needs to be return
+                if(target-sum<abs){
+                    abs = target-sum;
+                    ans= sum;
+                }
+                left++;
+            }
+        }
+        return ans;
+    }
+    
+    public int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+        int abs = Integer.MAX_VALUE;
+        int ans = Integer.MAX_VALUE;
+        
+        for(int i=0;i<nums.length-2;i++){                                     // nums.length-2 because, we have three elements to choose
+            int sum = getTwoSumClosest(nums, i+1, target-nums[i]) + nums[i];  // sum we get after taking nums[i] + twoSumClosestPair
+            if(Math.abs(sum-target)<abs){                                     // if diff of (sum-target) is less than abs, then update abs and answer also 
+               abs = Math.abs(sum-target);                                    // update abs min diff
+               ans = sum;                                                     // update ans which is sum nearset to target
+            }
+        }
+        return ans;
+    }
+}
