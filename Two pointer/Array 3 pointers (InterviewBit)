@@ -1,0 +1,76 @@
+You are given 3 arrays A, B and C. All 3 of the arrays are sorted.
+Find i, j, k such that :
+max(abs(A[i] - B[j]), abs(B[j] - C[k]), abs(C[k] - A[i])) is minimized.
+
+Return the minimum max(abs(A[i] - B[j]), abs(B[j] - C[k]), abs(C[k] - A[i]))
+
+Input : 
+        A : [1, 4, 10]
+        B : [2, 15, 20]
+        C : [10, 12]
+
+Output : 5 
+         With 10 from A, 15 from B and 10 from C. 
+---------------------------------------------------------------------------------------------------------------------------
+Approach: We’ll start with all i,j,k starting from 0 and at every iteration we’ll store the best result in a variable, and decide which pointer to move forward.
+          But how will we decide what pointer to move?
+
+          At every iteration we’ll calculate three values:
+
+          value1 = abs(A[i] - B[j]);
+          value2 = abs(B[j] - C[k]);
+          value3 = abs(C[k] - A[i]);
+          We’ll take maximum of these three values and check if it’s smaller than our best value, and replace the best value accordingly.
+
+          Then we’ll check which one was the max value in that iteration. If value1 was the max value, and because we need to minimize it, 
+          we need to move our pointers somehow such that |A[i] - B[j]| is somehow minimized.
+
+          If A[i] ≥ B[j], then we can do j++ to increase B[j] (as the array is sorted) which will decrease |A[i] - B[j]|, hence serving our purpose.
+
+          But if A[i] < B[j], then we can do i++ to increase A[i], which will again serve the same purpose.
+
+          Same kind of decisions need to made for value2 and value3. That way this algorithm will take O(3*N) time. And we break from the look once 
+          we hit the end of any one array.
+---------------------------------------------------------------------------------------------------------------------------
+public class Solution {
+    // DO NOT MODIFY THE LIST. IT IS READ ONLY
+    public int minimize(final List<Integer> A, final List<Integer> B, final List<Integer> C) {
+        int i=0, j=0, k=0;
+        int aLength = A.size(), bLength = B.size(), cLength = C.size();
+        int ans = Integer.MAX_VALUE;
+        int v1 = 0, v2 = 0, v3 = 0;
+        while(i<aLength && j<bLength && k<cLength){
+            v1 = Math.abs(A.get(i)-B.get(j));
+            v2 = Math.abs(B.get(j)-C.get(k));
+            v3 = Math.abs(C.get(k)-A.get(i)); 
+
+            int val = Math.max(v1, Math.max(v2, v3));
+            if(val<ans){
+                ans = val;
+            }
+            if(v1==val){
+                if(A.get(i)>=B.get(j)){
+                    j++;
+                } else{
+                    i++;
+                }
+            } else if(v2==val){
+                if(B.get(j)>=C.get(k)){
+                    k++;
+                } else{
+                    j++;
+                }
+            } else{
+                if(C.get(k)>=A.get(i)){
+                    i++;
+                } else{
+                    k++;
+                }
+            }
+        }
+        return ans;    
+    }
+}
+------------------------------------------------------------------------------------------------------------------------
+Time complexity = O(3*N).
+Space complexity = O(1).
