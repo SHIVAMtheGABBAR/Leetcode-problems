@@ -1,0 +1,43 @@
+Given an integer array nums, return the number of triplets chosen from the array that can make triangles if we take them as side lengths of a triangle.
+----------------------------------------------------
+Input: nums = [2,2,3,4]
+Output: 3
+Explanation: Valid combinations are: 
+2,3,4 (using the first 2)
+2,3,4 (using the second 2)
+2,2,3
+
+Input: nums = [4,2,3,4]
+Output: 4
+---------------------------------------------------
+Time complexity: O(N^2).
+Space complexity = O(1).
+------------------------------------------------------------------------------------------------------------------------------------
+Approach: A valid triangle, when (a+b>c) and (a+c>b) and (b+c>a), but once we sort the array, then we will focus on one condition that (a+b>c).
+
+------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    
+    public int getPairs(int[] nums, int right, int target){
+        int count = 0;
+        int left = 0;
+        while(left<right){
+            if(nums[left] + nums[right]>target){       // Valid Triangle, then get the count of all valid triangles, and then decrement right.
+                count += right-left;
+                right--;
+            } else{
+                left++;                               // Invalid Triangle, then increment left.
+            }
+        }
+        return count;
+    }
+    
+    public int triangleNumber(int[] nums) {
+        Arrays.sort(nums);
+        int count = 0;
+        for(int i=nums.length-1;i>1;i--){
+            count += getPairs(nums, i-1, nums[i]);
+        }
+        return count;
+    }
+}
