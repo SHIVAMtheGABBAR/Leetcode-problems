@@ -1,0 +1,71 @@
+Maximum Sum Triplet
+Given an array A containing N integers.
+You need to find the maximum sum of triplet ( Ai + Aj + Ak ) such that 0 <= i < j < k < N and Ai < Aj < Ak.
+If no such triplet exist return 0.
+--------------------------------------------------------
+Problem Constraints
+3 <= N <= 105.
+1 <= A[i] <= 108.
+--------------------------------------------------------
+Input Format
+First argument is an integer array A.
+
+Output Format
+Return a single integer denoting the maximum sum of triplet as described in the question.
+------------------------------------------------------------------------------------------------
+Input 1:
+A = [2, 5, 3, 1, 4, 9]
+Output 1:
+16
+
+Explanation 1:
+
+All possible triplets are:-
+    2 3 4 => sum = 9
+    2 5 9 => sum = 16
+    2 3 9 => sum = 14
+    3 4 9 => sum = 16
+    1 4 9 => sum = 14
+    Maximum sum = 16
+-----------------------------------------------------------------------------------------------    
+Approach: Find Rightmax and Leftmax for each element except { 1st element and last element}
+        : for rightmax, Traverse from right end and Find max element easliy while traversing.
+        : for Leftmax, Use Treeset, which will store unique lements also in sorted order, and also we can use a function lower in treeset
+          which will return the lesser element than current element passed
+-------------------------------------------------------------------------------------------
+public class Solution {
+    public int solve(ArrayList<Integer> A) {
+        int n = A.size();    
+        int[] rMaxArray = new int[n];
+        int sum = Integer.MIN_VALUE;
+
+        rMaxArray[n-1] = A.get(n-1);      // for last element it is the rightmax element
+        for(int i=n-2;i>=0;i--){          // traversing from n-2 to 0 to find rightmax
+            if(rMaxArray[i+1]>A.get(i)){            // if Element is lesser than rightmax[i+1] then current rightmax[i] will be equal to rightmax[i+1] 
+                rMaxArray[i] = rMaxArray[i+1];        
+            } else{
+                rMaxArray[i] = A.get(i);            // If Element is greater than rightmax[i+1], then rightmax[i] = current element 
+            }
+        }
+        
+        TreeSet<Integer> tset = new TreeSet<Integer>();       // used Treeset which will store data uniquely and in sorted order
+        tset.add(A.get(0));
+
+        for(int i=1;i<n-1;i++){                  // traverse from i=1 till i=n-2, because only those are middle elements for which we have left and right
+            Integer lmax = tset.lower(A.get(i));          // get lesser value element than current element, else return null in lmax
+            int rmax = rMaxArray[i+1];                    
+            if(rmax>A.get(i) && lmax!=null){              // it will always return less value element, so no need to check lmax<A.get(i).
+                sum = Math.max(sum, A.get(i) + lmax + rmax);      // comparing max of sum and (currentelement + left lesser element + right greater element )
+            }
+            tset.add(A.get(i));                                   // add element in Treeset
+        }
+
+        if(sum>Integer.MIN_VALUE){                                // it means we got some answer, so return that.
+            return sum;
+        }
+        return 0;                                                 // if no answer, then return 0.
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------
+Time complexity = O(NLogN) = for treeset to store element in sorted order
+Space = O(N)  = for rmax array and treeset also
