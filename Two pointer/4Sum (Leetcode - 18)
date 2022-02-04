@@ -17,7 +17,7 @@ Constraints:
 -109 <= nums[i] <= 109
 -109 <= target <= 109
 ---------------------------------------------------------------
-Approach: for ksum, use ksum if k>2 else use twosum approach
+Approach 1: for ksum, use ksum if k>2 else use twosum approach
 ----------------------------------------------------------
 class Solution {
     
@@ -79,3 +79,42 @@ class Solution {
 ---------------------------------------------------------
 Time complexity = for ksum = O(n^k-1)
 Space complexity = O(N) for arraylist
+-----------------------------------------------------------------------------------------------------------------------------------------------
+Approach2: Two outer loop and apply 2 pointer approach 
+-------------------------------------------------------------------------
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        if(nums.length < 4)
+            return new ArrayList<>();
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        // use set to remove duplicate
+        Set<List<Integer>> set = new HashSet<>();
+        for(int i = 0; i <= nums.length - 4; i++){
+            for (int j = i + 1; j <= nums.length - 3; j++){
+                int l = j + 1;
+                int r = nums.length - 1;
+                while(l < r){
+                    int val = nums[i] + nums[j] + nums[l] + nums[r];
+                    if(val == target){
+                        set.add(Arrays.asList(nums[i], nums[j], nums[l], nums[r])); // set which will store only unique list, so that duplicates won't come
+                        l++;
+                        r--;
+                    }else if(val < target)
+                        l++;
+                    else
+                        r--;
+                } 
+            }
+        }
+        
+        for(List<Integer> list : set)
+            res.add(list);
+        return res;
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------
+Time complexity = O(N^4) in worst case and O(N^3)*logN(for adding in set) in avg case
+                = O(N^4) = O(N^2) for 2 outer loops and O(N^2) is inner loop if Hashmap contains only one (key, value) pair which means all pairs
+                  are at one key which will take O(N2) to traverse all pairs because we have N^2 pairs in total.
+Space complexity = O(N)
