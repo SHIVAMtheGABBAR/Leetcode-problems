@@ -11,8 +11,38 @@ Input :
 
 Output : 5 
          With 10 from A, 15 from B and 10 from C. 
----------------------------------------------------------------------------------------------------------------------------
-Approach: We’ll start with all i,j,k starting from 0 and at every iteration we’ll store the best result in a variable, and decide which pointer to move forward.
+--------------------------------------------------------------------------------------------------------------------------------------
+Approach 1: Have pointer at 0th element for all Array, and then Find the least element of all three and increment it, until one of them reaches end of the array
+---------------------------------------------------------------------------------------------------------
+public class Solution {
+    // DO NOT MODIFY THE LIST. IT IS READ ONLY
+    public int minimize(final List<Integer> A, final List<Integer> B, final List<Integer> C) {
+        int i=0, j=0, k=0;
+        int aLength = A.size(), bLength = B.size(), cLength = C.size();
+        int ans = Integer.MAX_VALUE;
+        int v1 = 0, v2 = 0, v3 = 0;
+        while(i<aLength && j<bLength && k<cLength){
+            v1 = Math.abs(A.get(i)-B.get(j));
+            v2 = Math.abs(B.get(j)-C.get(k));
+            v3 = Math.abs(C.get(k)-A.get(i)); 
+
+            int val = Math.max(v1, Math.max(v2, v3));
+            if(val<ans){
+                ans = val;                                           // Update the answer
+            }
+            if(A.get(i)<=B.get(j) && A.get(i)<=C.get(k)){            // if A is less of all three than increment it
+                i++;
+            } else if(B.get(j)<=A.get(i) && B.get(j)<=C.get(k)){     // if B is less of all three than increment it
+                j++;
+            } else{                                                  // if C is less of all three than increment it
+                k++;
+            }
+        }
+        return ans;    
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------
+Approach2: We’ll start with all i,j,k starting from 0 and at every iteration we’ll store the best result in a variable, and decide which pointer to move forward.
           But how will we decide what pointer to move?
 
           At every iteration we’ll calculate three values:
