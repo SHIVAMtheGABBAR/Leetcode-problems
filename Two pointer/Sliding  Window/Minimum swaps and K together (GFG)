@@ -1,0 +1,64 @@
+Given an array arr of n positive integers and a number k. One can apply a swap operation on the array any number of times,
+i.e choose any two index i and j (i < j) and swap arr[i] , arr[j] . Find the minimum number of swaps required to bring all the numbers less than or equal to k
+together, i.e. make them a contiguous subarray.
+-------------------------------------------------------------------------------
+Input : 
+arr[ ] = {2, 1, 5, 6, 3} 
+K = 3
+Output : 1
+Explanation:
+To bring elements 2, 1, 3 together,
+swap index 2 with 4 (0-based indexing),
+i.e. element arr[2] = 5 with arr[4] = 3
+such that final array will be- 
+arr[] = {2, 1, 3, 6, 5}
+
+Input : 
+arr[ ] = {2, 7, 9, 5, 8, 7, 4} 
+K = 6 
+Output : 2 
+Explanation: 
+To bring elements 2, 5, 4 together, 
+swap index 0 with 2 (0-based indexing)
+and index 4 with 6 (0-based indexing)
+such that final array will be- 
+arr[] = {9, 7, 2, 5, 4, 7, 8}
+-------------------------------------------------------------------------------- 
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(1).
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Approach: Use Sliding window technique to find window first, then check in window what is the maximum count of values in window less than or equal to k, 
+          which will help to get count of minimum swaps required to make values less than or equal to k together anywhere.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+int minSwap(int nums[], int n, int k) {
+        int window = 0, ans = n, count = 0;
+        for(int i=0;i<n;i++){
+            if(nums[i]<=k){
+                window++;    // get count of values less than or equal to k, which will be our window, because we need to make k elements together by swapping
+            }
+        }
+        
+        for(int i=0;i<window;i++){
+            if(nums[i]<=k){
+                count++;                  // Get count of values in window less than or equal to k
+            }
+        }
+        if(window-count<ans){
+            ans = window-count;           // Total values in window which are less than or equal to k
+        }
+        
+        for(int i=window;i<n;i++){        // now check in each window if count of swaps can be minimized
+            int inc = nums[i];            // value to be included in window
+            int exc = nums[i-window];     // value to be excluded from window
+            if(inc<=k){                   // if included value is less than or equal to k, then increment count, which may further minimize our ans.
+                count++;
+            }
+            if(exc<=k){                   // if excluded value is less than or equal to k, then decrement count, which may further minimize our ans.
+                count--;
+            }
+            if(window-count<ans){         // If count can be optimized, then update our answer.
+                ans = window-count;
+            }
+        }
+        return ans;
+    }
