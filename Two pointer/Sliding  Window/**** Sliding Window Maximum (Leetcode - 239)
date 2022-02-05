@@ -36,7 +36,7 @@ class Solution {
                 dq.removeFirst();
             }
             
-            while(dq.size()>0 && dq.getLast()<nums[i]){    // To check if last element in dq is lesser than current array element, then keep on removing from dq
+            while(dq.size()>0 && nums[dq.getLast()]<nums[i]){    //Check if last element in dq is lesser than current array element, then keep on removing from dq
                 dq.removeLast();
             }
             dq.addLast(i);                                 // now add that current element in dq which may be maximum for other set of window
