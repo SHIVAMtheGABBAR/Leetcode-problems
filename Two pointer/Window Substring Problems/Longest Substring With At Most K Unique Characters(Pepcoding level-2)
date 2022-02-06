@@ -1,0 +1,57 @@
+1. You are given a string(str) and a number K.
+2. You have to find the length of longest substring of the given string that contains at most K unique characters.
+------------------------------------------------------------------------------------------------------------------------------------
+Constraints
+1 &lt;= length of string &lt;= 10^5
+1 &lt;= K &lt;= 26
+
+Input
+A string
+A number
+
+Output
+A number representing the length of longest substring with at most K unique characters.
+--------------------------------------------------------------------------------------------------------------------------------------
+Example
+aabcbcdbca
+2
+
+Sample Output
+4
+--------------------------------------------------------------------------------------------------------------------------------------
+Approach: Use hashmap and keep 2 pointers one right and other left and keep on gettting answer which will be of maximum length
+Time complexity = O(2*N)
+Space complexity = O(N) for hashmap
+--------------------------------------------------------------------------------------------------------------------------------------
+public static int solution(String s, int k) {
+		HashMap<Character, Integer> hmap = new HashMap<>();
+		int totalCount = 0, ansLength = 0, left = 0;
+
+		for(int right = 0; right<s.length();right++){
+			totalCount++;
+			hmap.put(s.charAt(right), hmap.getOrDefault(s.charAt(right), 0)+1);           // put element in hashmap
+			while(hmap.size()>k){                            // If hashmap size is greter than k which means invalid scenario, so keep on removing element from left
+				int removeCharCount = hmap.get(s.charAt(left));
+				if(removeCharCount>1){
+					hmap.put(s.charAt(left), removeCharCount-1);	
+				} else{
+					hmap.remove(s.charAt(left));
+				}
+				left++;                     // update left because of invalid scenario
+				totalCount--;               // update totalCount because one character is removed
+			}
+
+			if(right-left+1>ansLength){
+				ansLength = right-left+1;         // if we can update answer, then store it in ansLength
+			}
+		}
+		return ansLength;
+	}
+	
+	public static void main(String[] args) {
+		Scanner scn = new Scanner(System.in);
+        String str = scn.next();
+        int k = scn.nextInt();
+		System.out.println(solution(str,k));
+	}
+
