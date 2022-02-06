@@ -1,0 +1,57 @@
+1. You are given a string(str) and a number K.
+2. You have to find the count of substrings of the given string that contains at most K unique characters.
+--------------------------------------------------------------------------------------------------------------------------------------------
+Input
+A string
+A number
+
+Output
+A number representing the count of substrings with at most K unique characters.
+----------------------------------------------------------------------------------------
+Sample Input
+aabcbcdbca
+2
+
+Sample Output
+23
+-----------------------------------------------------------------------------------------------------------------------------------------
+Approach: Use hashmap and use 2 pointer for left and right
+Time complexity = O(2*N)
+Space complexity = O(N)
+-----------------------------------------------------------------------------------------------------------------------------------------
+public static int solution(String s, int k) {
+		HashMap<Character, Integer> hmap = new HashMap<>();
+		int totalCount = 0, ansLength = 0, ansTotalCount = 0, left = 0;
+		String ans = "";
+
+		for(int right = 0; right<s.length();right++){
+			totalCount++;
+			hmap.put(s.charAt(right), hmap.getOrDefault(s.charAt(right), 0)+1);
+			while(hmap.size()>k){
+				int removeCharCount = hmap.get(s.charAt(left));
+				if(removeCharCount>1){
+					hmap.put(s.charAt(left), removeCharCount-1);	
+				} else{
+					hmap.remove(s.charAt(left));
+				}
+				left++;
+				totalCount--;
+			}
+
+			if(right-left+1>ansLength){
+				ansLength = right-left+1;
+				ansTotalCount += ansLength;	
+			} else{
+				ansTotalCount += right-left+1; // if we cannot update ansLength then also we need to update totalCount by right-left+1 which is also a valid string length
+			}
+			 
+		}
+		return ansTotalCount;
+	}
+	
+	public static void main(String[] args) {
+		Scanner scn = new Scanner(System.in);
+        String str = scn.next();
+        int k = scn.nextInt();
+		System.out.println(solution(str,k));
+	}
