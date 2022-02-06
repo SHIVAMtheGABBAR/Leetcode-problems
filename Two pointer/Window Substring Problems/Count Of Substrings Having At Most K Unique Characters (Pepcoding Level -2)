@@ -19,9 +19,11 @@ Approach: Use hashmap and use 2 pointer for left and right
 Time complexity = O(2*N)
 Space complexity = O(N)
 -----------------------------------------------------------------------------------------------------------------------------------------
-public static int solution(String s, int k) {
+public class Main {
+
+	public static int solution(String s, int k) {
 		HashMap<Character, Integer> hmap = new HashMap<>();
-		int totalCount = 0, ansLength = 0, ansTotalCount = 0, left = 0;
+		int totalCount = 0, ansTotalCount = 0, left = 0;
 		String ans = "";
 
 		for(int right = 0; right<s.length();right++){
@@ -38,12 +40,7 @@ public static int solution(String s, int k) {
 				totalCount--;
 			}
 
-			if(right-left+1>ansLength){
-				ansLength = right-left+1;
-				ansTotalCount += ansLength;	
-			} else{
-				ansTotalCount += right-left+1; // if we cannot update ansLength then also we need to update totalCount by right-left+1 which is also a valid string length
-			}
+			ansTotalCount += right-left+1;
 			 
 		}
 		return ansTotalCount;
@@ -55,3 +52,4 @@ public static int solution(String s, int k) {
         int k = scn.nextInt();
 		System.out.println(solution(str,k));
 	}
+}
