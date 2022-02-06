@@ -1,0 +1,56 @@
+Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) 
+is included in the window. If there is no such substring, return the empty string "".
+A substring is a contiguous sequence of characters within the string.
+-----------------------------------------------------------------------------------------------------------------------------------------
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+
+Input: s = "a", t = "a"
+Output: "a"
+Explanation: The entire string s is the minimum window.
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public String minWindow(String s, String t) {
+        HashMap<Character, Integer> hmapt = new HashMap<>();          // To store frequency of second string which needs to be found in string s of minimum length
+        HashMap<Character, Integer> hmaps = new HashMap<>();          // this will get updated each toime when any charcter is visited
+        String ans = "";                                              // it will store ans. 
+        int ansLength = Integer.MAX_VALUE;                            // to ensure answer of min length
+        
+        for(int i=0;i<t.length();i++){
+            hmapt.put(t.charAt(i), hmapt.getOrDefault(t.charAt(i), 0)+1);         // freq of second string t store in hashmap
+        }
+        
+        int left = 0, matchCount = 0;       // left will start from 0 and it will move ahead when both hashmap have freq, that is when answer is valid 
+                                            // but we want to minimize it by  incrementing left, so that chacters will be reduced in final answer.
+        for(int right=0;right<s.length();right++){
+            int freqOfCurrentChar = hmaps.getOrDefault(s.charAt(right), 0)+1;         // freq of current char in first string s
+            hmaps.put(s.charAt(right), freqOfCurrentChar);                            // update freq in first string s
+            if(hmapt.getOrDefault(s.charAt(right), 0) == freqOfCurrentChar){          // if freq in char is same in second string then increment matchcount.
+                matchCount++;
+            }
+            
+            while(hmapt.size() == matchCount){                // we will keep on incrementing left till matchCount and hashmap size of string t is same
+                if(right-left+1<ansLength){                   // update answer as string and string length when possible
+                    ansLength = right-left+1;
+                    ans = s.substring(left, right+1);
+                }
+                
+                int freqOfRemoveChar = hmaps.get(s.charAt(left));               // now we need to remove charcter from left, so get its count
+                if(hmapt.getOrDefault(s.charAt(left), 0) == freqOfRemoveChar){  // need to decrement matchCount, when removing char from answer 
+                    matchCount--;
+                }
+                
+                if(freqOfRemoveChar==1){                                // If removal char freq is one then remove it from map, else decrement count by 1
+                    hmaps.remove(s.charAt(left));
+                } else{
+                    hmaps.put(s.charAt(left), freqOfRemoveChar-1);
+                }
+                left++;                                                 // now increment left by 1
+            }
+            
+        }
+        return ans;
+    }
+}
