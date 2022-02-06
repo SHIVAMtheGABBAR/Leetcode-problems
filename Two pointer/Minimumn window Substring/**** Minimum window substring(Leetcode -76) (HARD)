@@ -10,7 +10,10 @@ Input: s = "a", t = "a"
 Output: "a"
 Explanation: The entire string s is the minimum window.
 -------------------------------------------------------------------------------------------------------------------------------------------
-
+Approach: Check comments in solution.
+Time complexity = O(2*N) at max each element is traverse twice once with right and left.
+Space complexity = O(2*26) for both hashmap to store freq of lowercase letters.
+-------------------------------------------------------------------------------------------------------------------------------------------
 class Solution {
     public String minWindow(String s, String t) {
         HashMap<Character, Integer> hmapt = new HashMap<>();          // To store frequency of second string which needs to be found in string s of minimum length
