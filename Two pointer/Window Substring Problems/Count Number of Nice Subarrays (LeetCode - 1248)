@@ -1,0 +1,52 @@
+Given an array of integers nums and an integer k. A continuous subarray is called nice if there are k odd numbers on it.
+Return the number of nice sub-arrays.
+--------------------------------------------------------------------------------------------------------------------------------------
+Input: nums = [1,1,2,1,1], k = 3
+Output: 2
+Explanation: The only sub-arrays with 3 odd numbers are [1,1,2,1] and [1,2,1,1].
+Example 2:
+
+Input: nums = [2,4,6], k = 1
+Output: 0
+Explanation: There is no odd numbers in the array.
+Example 3:
+
+Input: nums = [2,2,2,1,2,2,1,2,2,2], k = 2
+Output: 16
+----------------------------------------------------------------------------------------------------------------------------------------
+Approach: { K unique = Atmost K unique elements - Atmost K-1 unique elements }
+Time complexity = O(N)
+Space complexity = O(1)
+------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int atMostKUnique(int[] nums, int k) {
+        int ansCount = 0, oddCount = 0, left = 0;
+        
+        for(int right=0;right<nums.length;right++){
+            if(nums[right]%2!=0){
+                oddCount++;
+            } 
+            
+            if(oddCount<=k){
+                ansCount += right-left+1; 
+                continue;
+            }
+            
+            while(left<=right && oddCount>k){
+                if(nums[left]%2!=0){
+                    oddCount--;
+                    left++;
+                    ansCount += right-left+1; 
+                    break;
+                }
+                left++;
+            }
+        }
+        return ansCount;
+    }
+    
+    public int numberOfSubarrays(int[] nums, int k) {
+        return atMostKUnique(nums, k) - atMostKUnique(nums, k-1);
+    }
+    
+}
