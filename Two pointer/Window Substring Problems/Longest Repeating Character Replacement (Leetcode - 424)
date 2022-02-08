@@ -1,0 +1,34 @@
+You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. 
+You can perform this operation at most k times.
+Return the length of the longest substring containing the same letter you can get after performing the above operations.
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Input: s = "ABAB", k = 2
+Output: 4
+Explanation: Replace the two 'A's with two 'B's or vice versa.
+
+Input: s = "AABABBA", k = 1
+Output: 4
+Explanation: Replace the one 'A' in the middle with 'B' and form "AABBBBA".
+The substring "BBBB" has the longest repeating letters, which is 4.
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Approach: Use 2 pointer approach and find maxCount of repeating characters from left to right, 
+          which will give us how many characters we need to replace from left to right.
+Time complexity = O(N), another approach will take O(26*N) where we need to traverse for each uppercase character to find answer.
+Soacec ompexity = O(26)
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+public int characterReplacement(String s, int k) {
+        int[] arr = new int[26];
+        int maxLength = 0, maxCount = 0, left = 0, right = 0; 
+        
+        for(right=0;right<s.length();right++){
+            maxCount = Math.max(maxCount, ++arr[s.charAt(right)-'A']);  // get count of characters till now which is max satisfying condition 
+            
+            if(right-left+1-maxCount>k){          // once condition is invalid whichmeans now we have to put more than k characters, then remove char from left
+                --arr[s.charAt(left)-'A'];        // note here we are not updating maxCount which may be incorrect but that is ok because it was valid earlier in
+                left++;                           // string and all that matters is finding the max window that occurred anywhere in the string
+            }
+            
+            maxLength = Math.max(maxLength, right-left+1);      /// get updated answer
+        }
+        return maxLength;
+}
