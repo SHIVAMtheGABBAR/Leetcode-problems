@@ -1,0 +1,36 @@
+Given an array of integers nums and an integer k, return the number of contiguous subarrays where the product of all the elements in the subarray 
+is strictly less than k.
+
+Input: nums = [10,5,2,6], k = 100
+Output: 8
+Explanation: The 8 subarrays that have product less than 100 are:
+[10], [5], [2], [6], [10, 5], [5, 2], [2, 6], [5, 2, 6]
+Note that [10, 5, 2] is not included as the product of 100 is not strictly less than k.
+
+Input: nums = [1,2,3], k = 0
+Output: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+Approach: Apply 2 pointer, use left and right to check when product >=target then keep on dividing it till it si less than target 
+          and also we need to take care of one condition while sum>=target is that we should have left<=right, then only we will do 
+          otherwise we will get ArrayIndexOutOfBoundException because of left raeches some where else.
+Time complexity = O(N)
+Space complexity = O(1)
+--------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int numSubarrayProductLessThanK(int[] nums, int target) {
+        int left = 0, maxCount = 0, prod=1;
+        if(target==0) return 0;
+        
+        for(int right=0;right<nums.length;right++){
+            prod *= nums[right];
+
+            while(left<=right && sum>=target){
+                prod = prod/nums[left];
+                left++;
+            }
+            maxCount += right-left+1; 
+        }
+        
+        return maxCount;
+    }
+}
