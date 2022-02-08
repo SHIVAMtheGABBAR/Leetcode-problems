@@ -1,0 +1,36 @@
+Given an array arr[] of integers of size N and a number X, the task is to find the sum of subarray having 
+maximum sum less than or equal to the given value of X.
+---------------------------------------------------------------------------------------------------------------------------------------
+Input: N = 5, X = 11
+arr[] = {1, 2, 3, 4, 5} 
+Output:  10
+Explanation: Subarray having maximum sum is {1, 2, 3, 4}.
+ 
+Input: N = 5, X = 7
+arr[] = {2, 4, 6, 8, 10} 
+Output:  6
+Explanation: Subarray having maximum sum is {2, 4} or {6}.
+---------------------------------------------------------------------------------------------------------------------------------------
+Approach: Use 2 pointer approach with left and right and whenever sum>target then try to remove elements from left by incrementing left.
+Time complexity = O(N)
+Space complexity = O(1)
+---------------------------------------------------------------------------------------------------------------------------------------
+class Solution
+{
+    long findMaxSubarraySum(long nums[], int N,int target)
+    {
+        int left = 0;
+        long maxSum = 0, currSum = 0;
+        
+        for(int right = 0;right<nums.length;right++){
+            currSum += nums[right];
+            while(currSum>target){
+                currSum = currSum-nums[left];
+                left++;
+            }
+            
+            maxSum = Math.max(maxSum, currSum);
+        }
+        return maxSum;
+    }
+}
