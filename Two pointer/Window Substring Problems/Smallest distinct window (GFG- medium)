@@ -1,0 +1,51 @@
+Given a string 's'. The task is to find the smallest window length that contains all the characters of the given string at least one time.
+For eg. A = “aabcbcdbca”, then the result would be 4 as of the smallest window will be “dbca”.
+----------------------------------------------------------------------------------------------------------------------
+Input : "AABBBCBBAC"
+Output : 3
+Explanation : Sub-string -> "BAC"
+
+Input : "aaab"
+Output : 2
+Explanation : Sub-string -> "ab"
+ 
+Input : "GEEKSGEEKSFOR"
+Output : 8
+Explanation : Sub-string -> "GEEKSFOR"
+---------------------------------------------------------------------------------------------------------------------------------
+Approach: Use 2 pointer approach one pointer at left and another at right. Use hashSet to find distinct count of characters, 
+          and then use hashMap to put values in that and when hmap size equals to hset then update answer and get the minimum length string
+Time complexity = O(N)
+Space complexity = O(N)
+---------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public String findSubString( String s) {
+        HashSet<Character> hset = new HashSet<>();
+        HashMap<Character, Integer> hmap = new HashMap<>();
+        int ansCount = s.length(), left = 0;
+        String ans = s;
+        
+        for(int i=0;i<s.length();i++){
+            hset.add(s.charAt(i));
+        }
+        
+        for(int right = 0;right<s.length();right++){
+            hmap.put(s.charAt(right), hmap.getOrDefault(s.charAt(right), 0) + 1);
+            while(left<=right && hset.size()==hmap.size()){
+                if(right-left+1<ansCount){
+                    ansCount = right-left+1;
+                    ans = s.substring(left, right+1);
+                }
+                
+                int count = hmap.get(s.charAt(left));
+                if(count<=1){
+                    hmap.remove(s.charAt(left));
+                } else{
+                    hmap.put(s.charAt(left), count-1);
+                }
+                left++;
+            }    
+        }
+        return ans;
+    }
+}
