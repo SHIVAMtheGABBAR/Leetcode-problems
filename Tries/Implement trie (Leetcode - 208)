@@ -1,0 +1,89 @@
+A trie (pronounced as "try") or prefix tree is a tree data structure used to efficiently store and retrieve keys in a dataset of strings.
+There are various applications of this data structure, such as autocomplete and spellchecker.
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Implement the Trie class:
+
+1. Trie() Initializes the trie object.
+2. void insert(String word) Inserts the string word into the trie.
+3. boolean search(String word) Returns true if the string word is in the trie (i.e., was inserted before), and false otherwise.
+4. boolean startsWith(String prefix) Returns true if there is a previously inserted string word that has the prefix prefix, and false otherwise.
+--------------------------------------------------------------------------------------------------------------------------------------------
+Why Tries over HashSet>>: HashCode of a string is based on length of a string, which means if a string has more length then searching that string will take time,
+                        which we can assume for now as O(L) {length} i.e., Searching, Insertion, deletion, find in hashset is O(L) in avg or best case. 
+                        But when lot of strings are there then, in worst case due to lot of strings which will lead us to lot of collisions.
+                        So to get rid of that we have a new data structure called TRIE , which will also insert, delete and find string in O(L),
+                        but it will also find prefixes also like if any string starts with 'APP', it can easliy tell in O(L). 
+                        So conclusion is when we have lot of string(huge dataset) then we should go for Tries, else we can use HashSet.
+                        The disadvantage of Trie over Hashset is that trie uses lot of extra spaces compared to HashSet.
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Trie {
+
+    public static class Node{
+        private Node[] children = new Node[26];   // Assuming lowercase characters for now
+        private boolean isEnd = false;            // isEnd will be false by default.
+        
+        public boolean contains(char ch){
+            return children[ch-'a']!=null;        // if Node contains that character or not, if present then only use get Node function, below we are not using. 
+        }                                         // as it is not needed in this problem.
+        
+        public Node get(char ch){                 // get node at  that character
+            return children[ch-'a'];
+        }
+        
+        public void set(char ch){                 // set character in node
+            children[ch-'a'] = new Node();
+        }
+        
+        public boolean getEnd(){                  // get end value
+            return isEnd;
+        }
+        
+        public void setEnd(){                     // set end value to true always whenEver we need to set
+            isEnd = true;
+        }
+    }
+    
+    Node root;
+    public Trie() {
+        root = new Node();                        // Create a new node
+    }
+    
+    public void insert(String word) {
+        Node curr = root;                         // get address of current node
+        
+        for(int i=0;i<word.length();i++){
+            char ch = word.charAt(i);             // get current character
+            
+            if(curr.contains(ch)==false)          // if character is not present then create a node and set character.  
+                curr.set(ch);
+            curr = curr.get(ch);                  // Incrementing curr position at new node to search new character in trie 
+        }
+        curr.setEnd();                            // once all character is traversed, setEnd as true.
+    } 
+    
+    public boolean search(String word) {
+        Node curr = root;
+        
+        for(int i=0;i<word.length();i++){
+            char ch = word.charAt(i);
+            
+            if(curr.contains(ch)==false)
+                return false;                     // if we didnt get that character in trie return false.
+            curr = curr.get(ch);
+        }
+        return curr.getEnd();                     // check and return end of that searched word.
+    }
+    
+    public boolean startsWith(String word) {
+        Node curr = root;
+        
+        for(int i=0;i<word.length();i++){
+            char ch = word.charAt(i);
+            
+            if(curr.contains(ch)==false)
+                return false;
+            curr = curr.get(ch);
+        }
+        return true;                              // Return true as if all characters are taversed which means prefix is possible.
+    }
+}
