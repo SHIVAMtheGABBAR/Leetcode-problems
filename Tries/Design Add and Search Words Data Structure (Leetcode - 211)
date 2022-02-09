@@ -1,0 +1,107 @@
+Design a data structure that supports adding new words and finding if a string matches any previously added string.
+
+Implement the WordDictionary class:
+
+WordDictionary() Initializes the object.
+void addWord(word) Adds word to the data structure, it can be matched later.
+bool search(word) Returns true if there is any string in the data structure that matches word or false otherwise. word may contain dots '.' 
+where dots can be matched with any letter.
+
+Input
+["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
+[[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+Output: [null,null,null,null,false,true,true,true]
+
+Explanation
+WordDictionary wordDictionary = new WordDictionary();
+wordDictionary.addWord("bad");
+wordDictionary.addWord("dad");
+wordDictionary.addWord("mad");
+wordDictionary.search("pad"); // return False
+wordDictionary.search("bad"); // return True
+wordDictionary.search(".ad"); // return True
+wordDictionary.search("b.."); // return True
+-------------------------------------------------------------------------------------------------------------- 
+Constraints:
+
+1 <= word.length <= 25
+word in addWord consists of lowercase English letters.
+word in search consist of '.' or lowercase English letters.
+There will be at most 3 dots in word for search queries.
+At most 10^4 calls will be made to addWord and search.
+--------------------------------------------------------------------------------------------------------------------------------------
+class WordDictionary {
+    
+    public static class Node{
+        private Node[] children = new Node[26];
+        private boolean isEnd = false;
+        
+        public boolean contains(char ch){
+            return children[ch-'a']!=null;
+        }
+        
+        public Node get(char ch){
+            return children[ch-'a'];
+        }
+        
+        public void set(char ch){
+            children[ch-'a'] = new Node();
+        }
+        
+        public boolean getEnd(){
+            return isEnd;
+        }
+        
+        public void setEnd(){
+            isEnd = true;
+        }
+    }
+    
+    Node root;
+
+    public WordDictionary() {
+        root = new Node();   
+    }
+    
+    public void addWord(String word) {
+        Node curr = root;
+        
+        for(int i=0;i<word.length();i++){           // similar to insertion in trie 
+            char ch = word.charAt(i);
+            
+            if(curr.contains(ch)==false)
+                curr.set(ch);
+            curr = curr.get(ch);
+        }
+        curr.setEnd();
+    }
+    
+    public boolean search(String word, int idx, Node curr){
+        if(idx == word.length()){         // if idx reaches word end then return last nodes end if it is true return true else false. 
+            return curr.getEnd();
+        }
+        
+        char ch = word.charAt(idx);           // get curr character
+        
+        if(ch != '.'){                        // if char is not DOT, and if char not found at curr node then return false else iterate recursively at next node.
+           if(curr.contains(ch)==false){
+               return false; 
+           } 
+           return search(word, idx+1, curr.get(ch));
+        }
+        
+        for(char chn = 'a';chn<='z';chn++){         // it reaches here which means DOT is present, so now we will loop and check who can take dots position 
+            if(curr.contains(chn) == false){        // if a cannot take DOTs place then we will check for b by continuing.  
+                continue;
+            }
+            if(search(word, idx+1, curr.get(chn))){   // we will iterate recursively and check next nodes character, if it can be search and so on using recursion 
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean search(String word) {
+        return search(word, 0, root);         // made helper here using idx = 0, and node as root.
+    }
+}
