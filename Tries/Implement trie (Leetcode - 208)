@@ -15,6 +15,8 @@ Why Tries over HashSet>>: HashCode of a string is based on length of a string, w
                         but it will also find prefixes also like if any string starts with 'APP', it can easliy tell in O(L). 
                         So conclusion is when we have lot of string(huge dataset) then we should go for Tries, else we can use HashSet.
                         The disadvantage of Trie over Hashset is that trie uses lot of extra spaces compared to HashSet.
+                        >>> Space taken by all strings in trie is O(N*L), where N = number of strings and L is max length of string.
+                        >>> time complexity  = O(L) for find, search, insert, prefix, delete in Trie.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 class Trie {
 
