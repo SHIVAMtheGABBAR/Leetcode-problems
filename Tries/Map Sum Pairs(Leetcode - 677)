@@ -1,0 +1,108 @@
+Design a map that allows you to do the following:
+1. Maps a string key to a given value.
+2. Returns the sum of the values that have a key with a prefix equal to a given string.
+-------------------------------------------------------------------------------------------------------
+Implement the MapSum class:
+
+MapSum() Initializes the MapSum object.
+void insert(String key, int val) Inserts the key-val pair into the map. If the key already existed, the original key-value pair will be overridden to the new one.
+int sum(string prefix) Returns the sum of all the pairs' value whose key starts with the prefix.
+---------------------------------------------------------------------------------------------------------
+Input
+["MapSum", "insert", "sum", "insert", "sum"]
+[[], ["apple", 3], ["ap"], ["app", 2], ["ap"]]
+Output: [null, null, 3, null, 5]
+
+Explanation
+MapSum mapSum = new MapSum();
+mapSum.insert("apple", 3);  
+mapSum.sum("ap");           // return 3 (apple = 3)
+mapSum.insert("app", 2);    
+mapSum.sum("ap");           // return 5 (apple + app = 3 + 2 = 5)
+---------------------------------------------------------------------------------------------------------- 
+Constraints:
+
+1 <= key.length, prefix.length <= 50
+key and prefix consist of only lowercase English letters.
+1 <= val <= 1000
+At most 50 calls will be made to insert and sum.
+--------------------------------------------------------------------------------------------------------------
+class MapSum {
+    
+    public static class Node{
+        private Node[] children = new Node[26];
+        private int val = 0;        // given value for each string
+        public int pref = 0;        // prefix
+             
+        public int getVal(){
+            return val;
+        }
+        
+        public void setVal(int val){
+            this.val = val;
+        }
+        
+        public Node get(char ch){
+            return children[ch-'a'];
+        }
+        
+        public void set(char ch){
+            children[ch-'a'] = new Node();
+        }
+        
+        public boolean contains(char ch){
+            return children[ch-'a']!=null;
+        }
+        
+    }
+    
+    Node root;
+
+    public MapSum() {
+        root = new Node();
+    }
+    
+    public int search(String word){                 // helper function created to check if any old value present for this word which needs to be replaced
+        Node curr = root;
+        
+        for(int i=0;i<word.length();i++){
+            char ch = word.charAt(i);
+            
+            if(curr.contains(ch)==false)
+                return 0;                           // if char not present, return 0. 
+            curr = curr.get(ch);
+        }
+        return curr.getVal();                       // Return the value of the string.
+    }
+    
+    public void insert(String word, int val) {     
+        int oldVal = search(word);                    // get old value of the prefix
+        
+        Node curr = root;
+        
+        for(int i=0;i<word.length();i++){
+            curr.pref += (val-oldVal);              // Remove diff(val-oldVal) from all the character prefix
+            char ch = word.charAt(i);
+            
+            if(curr.contains(ch)==false){
+                curr.set(ch);
+            }
+            curr = curr.get(ch);
+        }
+        curr.pref += (val-oldVal);                // remove prefix count for last character
+        curr.setVal(val);                         // set val for last character, which means value is stored for a string
+    }
+    
+    public int sum(String word) {
+        Node curr = root;
+        
+        for(int i=0;i<word.length();i++){
+            char ch = word.charAt(i);
+            
+            if(curr.contains(ch)==false)                    // if char not found then return 0.
+                return 0;
+            curr = curr.get(ch);
+        }
+        return curr.pref;                   // we need to return the sum of pref, which once we traversed the prefix we will return sum of prefix
+    }
+}
