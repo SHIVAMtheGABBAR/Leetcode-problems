@@ -1,0 +1,81 @@
+Write a function to find the longest common prefix string amongst an array of strings.
+If there is no common prefix, return an empty string "".
+----------------------------------------------------------------------------------------------------------------------------
+Input: strs = ["flower","flow","flight"]
+Output: "fl"
+
+Input: strs = ["dog","racecar","car"]
+Output: ""
+Explanation: There is no common prefix among the input strings.
+------------------------------------------------------------------------------------------------------------------------
+Constraints:
+
+1 <= strs.length <= 200
+0 <= strs[i].length <= 200
+strs[i] consists of only lower-case English letters.
+-------------------------------------------------------------------------------------------------------------------
+class Solution {
+    
+    public static class Node{
+        
+        private Node[] children = new Node[26];
+        private boolean isEnd = false;
+        
+        public Node getNode(char ch){
+            return children[ch-'a'];
+        }
+        
+        public void setNode(char ch){
+            children[ch-'a'] = new Node();
+        }
+        
+        public boolean getIsEnd(){
+            return isEnd;
+        }
+        
+        public void setIsEnd(){
+            isEnd = true;
+        }
+        
+        public boolean contains(char ch){
+            return children[ch-'a']!=null;
+        }
+        
+    }
+    
+    public void insert(Node root, String word){
+        for(int i=0;i<word.length();i++){
+            char ch = word.charAt(i);
+            if(root.contains(ch)==false){
+                root.setNode(ch);
+            }
+            root = root.getNode(ch);
+        }
+        root.setIsEnd();
+    }
+    
+    public String search(Node root, String word){             // get common prefix of all words
+        for(int i=0;i<word.length();i++){
+            char chn = word.charAt(i);
+            int count = 0;
+            for(char ch = 'a';ch<='z';ch++){                  // Check count of words on a root level
+                if(root.contains(ch)==true){                  
+                    count++;
+                }
+            }
+            if(count>1 || root.getIsEnd()==true){               // check if count>1 or its end of any word in trie then we need to return substring of word
+                return word.substring(0, i);
+            }
+            root = root.getNode(chn);
+        }
+        return word;
+    }
+    
+    public String longestCommonPrefix(String[] s) {
+        Node root= new Node();
+        for(String word:s){
+            insert(root, word);
+        }
+        return search(root, s[0]);
+    }   
+}
