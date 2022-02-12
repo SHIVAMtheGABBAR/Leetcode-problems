@@ -24,6 +24,8 @@ Exaplanation:
 Testcase 1: For the given string "ab" the total distinct substrings are: "", "a", "b", "ab".
 ---------------------------------------------------------------------------------------------------------------------------------
 Approach: while inseting character in trie increment count value by 1 and return count.
+Time complexity = O(N^2).
+Space complexity = O(1).
 ____________________________________________________________________________________________________________________
 class GfG
 {
