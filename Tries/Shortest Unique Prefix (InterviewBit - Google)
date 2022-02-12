@@ -1,0 +1,84 @@
+Find shortest unique prefix to represent each word in the list.
+
+Input: [zebra, dog, duck, dove]
+Output: {z, dog, du, dov}
+
+where we can see that
+zebra = z
+dog = dog
+duck = du
+dove = dov
+NOTE : Assume that no word is prefix of another. In other words, the representation is always possible.
+------------------------------------------------------------------------------------------------------------------------------------
+public class Solution {
+    
+    public static class Node{
+        private Node[] children = new Node[26];
+        private boolean isEnd = false;
+        private int prefCount = 0;                      // it will store number of times this character is visited, as prefix of any word 
+
+        public Node getNode(char ch){
+            return children[ch-'a'];
+        }
+
+        public void setNode(char ch){
+            children[ch-'a'] = new Node();
+        }
+
+        public boolean contains(char ch){
+            return children[ch-'a']!=null;
+        }
+
+        public boolean getIsEnd(){
+            return isEnd;        
+        }
+
+        public void setIsEnd(){
+            isEnd = true;        
+        }
+
+        public int getPrefCount(){
+            return prefCount;        
+        }
+
+        public void setPrefCount(){
+            prefCount = prefCount+1;        
+        }
+    }
+
+    public void insert(Node root, String word){                 // Insertion of words in trie
+        for(int i=0;i<word.length();i++){ 
+            char ch = word.charAt(i);
+            if(root.contains(ch)==false){
+                root.setNode(ch);
+            }
+            root.setPrefCount();
+            root = root.getNode(ch);
+        }
+        root.setIsEnd();
+    }
+
+    public String getUniquePrefix(Node root, String word){            //get Unique prefix and return it.
+        for(int i=0;i<word.length();i++){
+            if(root.getPrefCount()==1){                               // check if count is 1 then return that prefix else treverse for next character in word
+                return word.substring(0, i);                          // and also it is sure that we will get 1 at some point because, problem tell that 
+            }                                                         // No whole string is prefix of another string.      
+            root = root.getNode(word.charAt(i));
+        }
+        return word;
+    }
+    
+    public ArrayList<String> prefix(ArrayList<String> A) {            
+        Node root = new Node();
+        ArrayList<String> ans = new ArrayList<>();
+
+        for(String word:A){
+            insert(root, word);
+        }
+
+        for(String word: A){
+            ans.add(getUniquePrefix(root, word));           // Find unique prefix and add it in ArrayList
+        }
+        return ans;
+    }
+}
