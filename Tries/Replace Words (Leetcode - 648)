@@ -1,0 +1,97 @@
+In English, we have a concept called root, which can be followed by some other word to form another longer word - let's call this word successor.
+For example, when the root "an" is followed by the successor word "other", we can form a new word "another".
+
+Given a dictionary consisting of many roots and a sentence consisting of words separated by spaces, replace all the successors in the sentence
+with the root forming it. If a successor can be replaced by more than one root, replace it with the root that has the shortest length.
+Return the sentence after the replacement.
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Input: dictionary = ["cat","bat","rat"], sentence = "the cattle was rattled by the battery"
+Output: "the cat was rat by the bat"
+
+Input: dictionary = ["a","b","c"], sentence = "aadsfasf absbs bbab cadsfafs"
+Output: "a a b c"
+---------------------------------------------------------------------------------------------------------------------------------------------------- 
+Constraints:
+
+1 <= dictionary.length <= 1000
+1 <= dictionary[i].length <= 100
+dictionary[i] consists of only lower-case letters.
+1 <= sentence.length <= 106
+sentence consists of only lower-case letters and spaces.
+The number of words in sentence is in the range [1, 1000]
+The length of each word in sentence is in the range [1, 1000]
+Every two consecutive words in sentence will be separated by exactly one space.
+sentence does not have leading or trailing spaces.
+----------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    
+    public static class Node{
+        
+        private Node[] children = new Node[26];
+        private boolean isEnd = false;
+        
+        public Node getNode(char ch){
+            return children[ch-'a'];
+        }
+        
+        public void setNode(char ch){
+            children[ch-'a'] = new Node();
+        }
+        
+        public boolean getIsEnd(){
+            return isEnd;
+        }
+        
+        public void setIsEnd(){
+            isEnd = true;
+        }
+        
+        public boolean contains(char ch){
+            return children[ch-'a']!=null;
+        }
+        
+    }
+    
+    public void insert(Node root, String word){               // insert word
+        for(int i=0;i<word.length();i++){
+            char ch = word.charAt(i);
+            if(root.contains(ch)==false){
+                root.setNode(ch);
+            }
+            root = root.getNode(ch);
+        }
+        root.setIsEnd();
+    }
+    
+    public String search(Node root, String word){   // search word passed from sentence
+        for(int i=0;i<word.length();i++){             // never use>> for(char ch: word), to Traverse a string it wont work.
+            char ch = word.charAt(i);
+            
+            if(root.getIsEnd()==true){
+                return word.substring(0, i);          // if is End set and till current char it is prefix of given word.
+            }
+            
+            if(root.contains(ch)==false){             // if word is not found in trie then return that word only.
+                return word;
+            }
+            root = root.getNode(ch);
+        }
+        return word;                                  // when all character of word is trvaersed and found int trie, then it means return word only. 
+    }
+    
+    public String replaceWords(List<String> dictionary, String sentence) {
+        Node root = new Node();
+        for(String word: dictionary){
+            insert(root, word);                       // inserts words
+        }
+        String ans = "";
+        
+        String[] arr = sentence.split(" ");           // split sentence based on Spaces
+        
+        for(String word: arr){
+            ans += search(root, word) +" ";         // add ans and spaces
+        }
+        ans = ans.substring(0, ans.length()-1);     // removes space from last of the answer.
+        return ans;
+    }
+}
