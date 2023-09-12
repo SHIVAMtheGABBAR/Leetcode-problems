@@ -1,0 +1,98 @@
+Ques 1: Find if a number is Prime or not.
+===============================================================================================
+Soln 1: iterate till the number using loop and check if number is divisble by any number 
+        till n and when divisible by n check if both numbers are different.
+
+Time complexity = O(n)
+Space Complexity = O(1)
+===================================
+import java.util.*;
+  
+  public class Main{
+      
+  public boolean checkPrime(int n){
+      if(n<=1){
+          return false;
+      }
+      
+      for(int i=2;i<=n;i++){
+          if(n%i==0 && n!=i) // check if number divisible by i and both shold be distinct
+            return false;
+      }
+      return true;
+  }      
+  
+  public static void main(String[] args) {
+    Scanner scn = new Scanner(System.in);
+    int t = scn.nextInt();
+    while(t-->0){
+        int n = scn.nextInt();
+        if(checkPrime(n)){
+            System.out.println("prime");
+        } else{
+            System.out.println("not prime");
+        }
+    }
+   }
+  }
+
+===============================================================================================
+Soln 2: Iterate till half of the number as a number cannot be divisible by more than half of it.
+        ex: 32, then if it has to be divisible then it will get divide till 32/2 else it wont be divisible.
+
+Time Complexity = O(n/2)
+Space Complexity = O(1)
+=================================
+
+import java.util.*;
+  
+  public class Main{
+      
+  public boolean checkPrime(int n){
+      if(n<=1){
+          return false;
+      }
+      
+      for(int i=2;i<=n;i++){
+          if(n%i==0 && n!=i) // check if number divisible by i and both shold be distinct
+            return false;
+      }
+      return true;
+  }      
+  
+  public static void main(String[] args) {
+    Scanner scn = new Scanner(System.in);
+    int t = scn.nextInt();
+    while(t-->0){
+        int n = scn.nextInt();
+        if(checkPrime(n)){
+            System.out.println("prime");
+        } else{
+            System.out.println("not prime");
+        }
+    }
+   }
+  }
+
+===============================================================================================
+Soln 3: Iterate till Sqrt(n), 
+        If a number is not a prime, it can be factored into two factors f1 and f2.
+        If f1 and f2 are > the sqrt of the number, f1*f2 would be > the number. So at least one of those factors
+        must be <= to the sqrt of the number. To see if a number is actually prime, we only need to test factors
+        that are <= to the sqrt.
+
+Time complexity = O(sqrt(n))
+Space Complexity = O(1)
+================================
+
+public boolean isPrime(int n) {
+       if (n <= 1) {
+           return false;
+       }
+       for (int i = 2; i <= Math.sqrt(n); i++) {
+           if (n % i == 0) {
+               return false;
+           }
+       }
+       return true;
+    }
