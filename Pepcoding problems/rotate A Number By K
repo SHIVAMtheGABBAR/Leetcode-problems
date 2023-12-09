@@ -1,0 +1,54 @@
+Given two integers N and K, the task is to rotate the digits of N by K. If K is a positive integer, left rotate its digits. Otherwise, right rotate its digits.
+
+Examples:
+
+Input: N = 12345, K = 2
+Output: 34512 
+Explanation: 
+Left rotating N(= 12345) by K(= 2) modifies N to 34512. 
+Therefore, the required output is 34512
+
+Input: N = 12345, K = -3
+Output: 34512 
+Explanation: 
+Right rotating N(= 12345) by K( = -3) modifies N to 34512. 
+Therefore, the required output is 34512
+
+===============================================================================
+
+Solution: Tc = O(logn)
+
+Approach:
+Initialize a variable, say X, to store the count of digits in N.
+Update K = (K + X) % X to reduce it to a case of left rotation.
+Remove the first K digits of N and append all the removed digits to the right of the digits of N.
+Finally, print the value of N.
+================================================
+import java.io.*;
+import java.util.*;
+
+class GFG {
+		public static void main(String[] args) {
+    Scanner scn = new Scanner(System.in);
+    int n = scn.nextInt();
+    int k = scn.nextInt();
+
+    int counter = 0;
+    int temp = n;
+    while (temp > 0)
+    {
+      counter++; // Count of digits
+      temp = temp / 10;
+    }
+
+    k = ((k % counter) + counter) % counter; // make left shift only using this formula
+
+    int div = (int)Math.pow(10, counter-k); //now break number in 2 parts and add properly
+    int rem = n % div;
+    n = n / div;
+
+    int mult = (int)Math.pow(10, k);
+    int res = rem * mult + n;
+    System.out.println(res);
+	}
+}
