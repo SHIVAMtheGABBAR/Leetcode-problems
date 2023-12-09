@@ -1,0 +1,29 @@
+Find GCD and LCM of two numbers
+
+Ex: n1 = 5, n2 = 3
+Gcd = 1
+LCM = 15
+
+=====================================
+
+Solution: 
+public static void main(String[] args) {
+        // write your code here 
+        Scanner scn = new Scanner(System.in);
+        
+        int n1 = scn.nextInt();
+        int n2 = scn.nextInt();
+        
+        int dvd = n1;
+        int dsr = n2;
+        
+        while(dvd % dsr != 0)
+        {
+            int rem = dvd % dsr;
+            dvd = dsr;
+            dsr = rem;
+        }
+        
+        System.out.println(dsr); // GCD
+        System.out.println((n1 * n2) / dsr); // LCM
+     }
