@@ -1,0 +1,49 @@
+Given an m x n matrix, return all elements of the matrix in spiral order.
+
+start from 0, 0 ad traverse top, right, bottom, left and so on
+Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+Output: [1,2,3,6,9,8,7,4,5]
+==============================================================
+Time complexity = o(m*n)
+
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+       List<Integer> answer = new ArrayList<>();
+
+       int minr = 0, maxr = matrix.length-1;
+       int minc = 0, maxc = matrix[0].length-1;
+
+       int totalElements = matrix.length * matrix[0].length;
+       int counter = 0;
+       while(counter < totalElements){
+           //top wall
+            for(int i= minr, j = minc; j<=maxc && counter < totalElements; j++) { // counter < totalElements this check so that if we dont have more elementss then stop that loop
+                answer.add(matrix[i][j]);
+                counter++;
+            }
+            minr++; // increment or decrement for next time 
+
+            // right wall
+            for(int i= minr, j = maxc; i<=maxr && counter < totalElements; i++) {
+                answer.add(matrix[i][j]);
+                counter++;
+            }
+            maxc--;
+
+            // bottom wall
+            for(int i= maxr, j = maxc; j>=minc && counter < totalElements; j--) {
+                answer.add(matrix[i][j]);
+                counter++;
+            }
+            maxr--;
+
+            //left wall
+            for(int i= maxr, j = minc; i>=minr && counter < totalElements; i--) {
+                answer.add(matrix[i][j]);
+                counter++;
+            }
+            minc++;
+       }
+    return answer;    
+    }
+}
