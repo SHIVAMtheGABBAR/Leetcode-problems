@@ -1,0 +1,58 @@
+Given an m x n matrix mat, return an array of all the elements of the array in a diagonal order.
+
+Input: mat = [[1,2,3],[4,5,6],[7,8,9]]
+Output: [1,2,4,7,5,3,6,8,9]
+Example 2:
+
+Input: mat = [[1,2],[3,4]]
+Output: [1,2,3,4]
+============================================================================================================
+Time complexity = o(m*n)
+Space = O(m+n) // given matrix only used so o(1)
+
+==================================================================
+Approach:
+1. we have to go first up and then down.
+2. while going up we need to row-- and col++
+3. while going down we need to row++ and col--
+4. Edge case when we will traverse half diagonal in that case we need tot ake care that if we do for up and down like aboe then will go outside matrix
+   So for that we have our while loop while going up till row > 0 and col> n-1, because of greater sign we need to print last element once more
+
+class Solution {
+    public int[] findDiagonalOrder(int[][] mat) {
+        boolean up = true;
+        int m = mat.length, n = mat[0].length;
+        int[] ans = new int[m*n];
+        int row = 0, col = 0, index=  0;
+
+       while(row<m && col<n) {
+           if(up == true){
+               while(row>0 && col<n-1){
+                   ans[index++] = mat[row][col]; 
+                   row--;
+                   col++;
+               }
+               ans[index++] = mat[row][col];
+               if(col==n-1) {
+                   row++;  // case while right diagonal traversing
+               } else{
+                   col++;  // case while left diagonal traversing
+               }
+           } else{
+                while(row<m-1 && col>0){
+                   ans[index++] = mat[row][col]; 
+                   row++;
+                   col--;
+               }
+               ans[index++] = mat[row][col];
+               if(row==m-1) {
+                   col++;    // case while right diagonal traversing
+               } else{
+                   row++;     // case while left diagonal traversing
+               }
+           }
+           up = !up;
+       }
+       return ans;
+    }
+}
