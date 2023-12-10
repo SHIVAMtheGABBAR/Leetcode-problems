@@ -1,1 +1,31 @@
-hi
+Reeverse a stack sing recurion in O(1) space
+
+==============================
+
+import java.util.Stack;
+
+public class Solution {
+    
+	public static void reverseStack(Stack<Integer> stack) {
+		if(stack.isEmpty())
+			return;
+		int temp = stack.pop();
+		reverseStack(stack);
+		insertAtLast(stack, temp);
+	}
+
+	private static void insertAtLast(Stack<Integer> stack, int element){
+		if(stack.isEmpty()){
+			stack.push(element);
+			return;
+		}
+
+		int val = stack.pop();
+		insertAtLast(stack, element);
+		stack.push(val);
+
+
+	}
+
+}
+
