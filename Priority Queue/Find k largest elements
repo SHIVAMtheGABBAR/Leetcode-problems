@@ -1,0 +1,59 @@
+Given an 1D integer array A of size N you have to find and return the B largest elements of the array A.
+
+NOTE: Return the largest B elements in any order you like.
+
+Problem Constraints : 1 <= N <= 10^5
+                      1 <= B <= N
+                      1 <= A[i] <= 10^3
+
+Input Format
+1. First argument is an 1D integer array A
+2. Second argument is an integer B.
+
+Output Format
+Return a 1D array of size B denoting the B largest elements.
+------------------------------------------------------------------------------------
+Input 1:
+ A = [11, 3, 4]
+ B = 2
+
+Input 2:
+ A = [11, 3, 4, 6]
+ B = 3
+
+Output 1:  [11, 4]
+Output 2:  [4, 6, 11]
+------------------------------------------------------------------------------------
+Explanation 1: The two largest elements of A are 11 and 4
+Explanation 2: The three largest elements of A are 11, 4 and 6
+------------------------------------------------------------------------------------
+
+Time complecity = O(N)
+Space complexity = O(N)
+
+==========================
+
+Approach: 1. all all elements in prioeritu queue with largest at top.
+          2. Then add top B elements to answer array and return it.
+
+========================
+
+public class Solution {
+    public int[] solve(int[] A, int B) {
+        int[] ans = new int[B];
+        int index = 0;
+        PriorityQueue<Integer> pq=  new PriorityQueue<>((a, b) -> b-a);
+        
+        for(int i=0;i<A.length;i++){
+            pq.add(A[i]);
+        }
+        
+        for(int i=0;i<B;i++){
+            ans[i] = pq.peek();
+            pq.poll();
+
+            // or we can do directly ans[i] = pq.poll() at one line only
+        }
+        return ans;
+    }
+}
