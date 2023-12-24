@@ -1,0 +1,69 @@
+Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
+
+We will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.
+
+You must solve this problem without using the library's sort function.
+
+Example 1:
+Input: nums = [2,0,2,1,1,0]
+Output: [0,0,1,1,2,2]
+
+Example 2:
+Input: nums = [2,0,1]
+Output: [0,1,2]
+
+===========================================================
+Time complexity = O(N)
+Space complexity = O(1)
+===============
+The given method sortColors is an implementation of the Dutch National Flag algorithm, also known as 3-way partitioning.
+
+Approach: 
+1. low is the pointer to the position where the next 0 should go.
+2. mid is the current position being processed.
+3. high is the pointer to the position where the next 2 should go.
+Initially, low and mid are both set to the beginning of the array, and high is set to the end.
+
+>> The while loop continues until mid crosses high.
+>> If nums[mid] is 0, it means we need to move this 0 to the beginning of the array. We swap the element at mid with the element at low and then increment both mid and low.
+    This ensures that all elements before low are 0s.
+>> If nums[mid] is 1, it means it's already in its correct position, and we just increment mid, because we know if we get 0 or 2 then we have its pointer 
+   and we will omve those to their correct position and move ahead
+>> If nums[mid] is 2, it means we need to move this 2 to the end of the array. We swap the element at mid with the element at high and then decrement high. This ensures that all elements after high are 2s.
+
+=======================================================================
+
+
+class Solution {
+
+    public void swap(int[] nums, int left, int right) {
+        int temp = nums[left];
+        nums[left] = nums[right];
+        nums[right] = temp;
+    }
+
+
+    public void sortColors(int[] nums) {
+        int low = 0, mid = 0, high = nums.length -1;
+
+        while(mid<=high) {
+            if(nums[mid] == 0) {
+                swap(nums,mid, low);
+                mid++;
+                low++;
+            } else if(nums[mid] == 1){
+                mid++;
+            } else {
+                swap(nums, mid, high);
+                high--; // why not mid incremented because we may get 0 at this 
+                // and if we move ahead then 0 will be at wrong position.
+            }
+        }
+    }
+}
+
+
+
+
+
+
