@@ -1,0 +1,67 @@
+prirnt odd and even number in multiple thread one by one in java
+
+=================================
+public class Main {
+ 
+    public static void main(String[] args){
+       OddEvenPrinter printer = new OddEvenPrinter(10);
+       Thread oddThread = new Thread(printer:: oddPrinter);
+       Thread evenThread = new Thread(printer:: evenPrinter);
+
+       oddThread.start();
+       evenThread.start();
+    }
+
+}
+
+public class OddEvenPrinter {
+
+    private int max; // to limit till which nnumber we need to print 
+    private int count = 1; // starting of numbers
+    private Object lock; // object lock 
+
+
+    public OddEvenPrinter(int max){ // constructor for initialization
+        this.max = max;
+        this.lock = new Object();
+    }
+
+    public void oddPrinter() {
+        synchronized (lock) { // synchronized so that only one thread can have this lock at one time so that they can update the value of count,
+                              // otherwise if we have different lock then both can update count which leads to inconsistent results 
+            while(count < max) {
+                if(count%2 == 1){
+                    System.out.println("Thread " + Thread.currentThread().getId() + " : " + count);
+                    count++;
+                    lock.notify();   // notify o other thread to wake up and print even number
+                } else {
+                    try {
+                        lock.wait();  // if count is not odd then wait till the even number prints value and notify then it will start executing
+                    } catch (InterruptedException ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    public void evenPrinter() {
+        synchronized (lock) {
+            while(count <= max) {
+                if(count%2 == 0){
+                    System.out.println("Thread " + Thread.currentThread().getId() + " : " + count);
+                    count++;
+                    lock.notify();
+                } else {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+
+}
