@@ -1,1 +1,60 @@
-.
+Longest Sub-Array with Sum K
+Given an array arr[] containing integers and an integer k, your task is to find the length of the longest subarray where
+the sum of its elements is equal to the given value k. It is guaranteed that a valid subarray exists.
+
+Examples:
+
+Input: arr[] = [10, 5, 2, 7, 1, 9], k = 15
+Output: 4
+Explanation: The subarray [5, 2, 7, 1] has a sum of 15 and length 4.
+Input: arr[] = [-1, 2, -3], k = -2
+Output: 3
+Explanation: The subarray [-1, 2, -3] has a sum of -2 and length 3.
+Input: arr[] = [1, -1, 5, -2, 3], k = 3
+Output: 4
+Explanation: The subarray [1, -1, 5, -2] has a sum of 3 and a length 4.
+
+
+Constraints:
+1 ≤ arr.size() ≤ 106
+-109 ≤ arr[i], k ≤ 109
+
+===================================================================================================
+Solution 
+Tc = O(N)
+Sc = O(N) due to HashMap
+
+===================================================================================================
+
+class Solution {
+    public int lenOfLongestSubarr(int[] arr, int k) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        
+        int res = 0, sum = 0;
+        for(int i=0;i<arr.length;i++) {
+            sum += arr[i];
+            if(sum == k) {
+                res = i+1; // means from starting till here can also be largest subarray sum
+            }
+            
+            if(map.containsKey(sum-k)) { // will check if sum-k is present in map, if present then possible from current i index
+                                          // till the sum-k index can be alargest subarray
+                res = Math.max(res, i-map.get(sum-k));
+            }
+            map.putIfAbsent(sum, i); // here we are not overriding, if absent then only add
+                                      // and if u override then will get smallest subarray with sum k
+        }
+        return res;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
