@@ -1,1 +1,73 @@
+question LInk : https://www.geeksforgeeks.org/problems/union-of-two-sorted-arrays-1587115621/1?utm_source=youtube&utm_medium
+=collab_striver_ytdescription&utm_campaign=union-of-two-sorted-arrays
+========================================================================================
+
+question : 
+Given two sorted arrays a[] and b[], where each array may contain duplicate elements , the task is to return the elements in the 
+union of the two arrays in sorted order.
+
+Union of two arrays can be defined as the set containing distinct common elements that are present in either of the arrays.
+
+========================================================================================
+Examples:
+
+Input: a[] = [1, 2, 3, 4, 5], b[] = [1, 2, 3, 6, 7]
+Output: 1 2 3 4 5 6 7
+Explanation: Distinct elements including both the arrays are: 1 2 3 4 5 6 7.
+Input: a[] = [2, 2, 3, 4, 5], b[] = [1, 1, 2, 3, 4]
+Output: 1 2 3 4 5
+Explanation: Distinct elements including both the arrays are: 1 2 3 4 5.
+========================================================================================
+
+1  <=  a.size(), b.size()  <=  105
+-109  <=  a[i] , b[i]  <=  109
+
+========================================================================================
+Solution : 
+
+Tc = O(m+n)
+S(C) = O(m+n) to return the array answer else O(1)
+
+========================================================================================
+
+public static ArrayList<Integer> findUnion(int a[], int b[]) {
+        ArrayList<Integer> result = new ArrayList<>();
+        int n1 = a.length, n2 = b.length;
+        int i=0, j=0;
+        while(i<n1 && j<n2) {
+            if(a[i]<=b[j]) {
+                if(result.size() ==0 || result.get(result.size()-1) != a[i]) { 
+
+          // if its first element then add it to result or else if last insertted element in array not equlas current elemenent the also
+     // insert but if last inseted and current element is same dont insert but in both cases if we insert or not insert we need to do i++
+      // samae thing we have to do for j case also where if b has smaller element and then when any one of arrays end then we need to
+// add elements from lesftover array also by checking if last element is not same na.
+
+                    result.add(a[i]);
+                }
+                i++;
+            } else {
+                if(result.size() == 0 || result.get(result.size()-1) != b[j]) {
+                    result.add(b[j]);
+                }
+                j++;
+            }
+        }
+        
+        while(i<n1) {
+           if(result.size() ==0 || result.get(result.size()-1) != a[i]) {
+                result.add(a[i]);
+            }
+            i++; 
+        }
+        
+        while(j<n2){
+            if(result.size() == 0 || result.get(result.size()-1) != b[j]) {
+                result.add(b[j]);
+            }
+            j++;
+        }
+        
+        return result;
+    }
 
